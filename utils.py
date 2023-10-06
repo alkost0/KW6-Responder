@@ -24,3 +24,46 @@ def send_newsletter(newsletter):
 
         for client in newsletter.clients.all():
             try:
+
+msg = EmailMessage()
+msg[‘Subject’] = subject
+msg.set_content(body)
+msg[‘From’] = ‘noreply@example.com’
+msg[‘To’] = client.email
+smtp = smtplib.SMTP(‘localhost’)
+smtp.send_message(msg)
+success.append(client)
+except Exception as e:
+error.append({‘client’: client, ‘error’: str(e)})
+
+    newsletter.log.create(
+        last_attempted=timezone.now(),
+        status='error' if error else 'success',
+        errors=error if error else None
+    )
+class NewsletterAdmin(admin.ModelAdmin):
+list_display = [‘id’, ‘name’, ‘periodicity’, ‘status’]
+list_filter = [‘status’]
+search_fields = [‘name’]
+
+class ClientAdmin(admin.TabularInline):
+model = Client
+extra = 1
+
+class MessageAdmin(admin.StackedInline):
+model = NewsletterMessage
+extra = 0
+
+@admin.register(Newsletter)
+
+class NewsletterModelAdmin(NewsletterAdmin):
+inlines = [ClientAdmin, MessageAdmin]
+
+admin.site.register(Client)
+admin.site.register(Newsletter, NewsletterModelAdmin)
+admin.site.unregister(NewsletterMessage)
+
+if name == ‘main’:
+os.environ.setdefault(‘DJANGO_SETTINGS_MODULE’, ‘your_app_name.settings’)
+from django.core.management import execute_from_command_line
+execute_from_command_line(sys.argv)
