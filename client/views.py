@@ -1,8 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-
 from client.forms import ClientForm
 from client.models import Client
 
@@ -42,10 +40,9 @@ class ClientDetailView(DetailView):
         return context
 
 
-class ClientUpdateView(PermissionRequiredMixin, UpdateView):
+class ClientUpdateView(UpdateView):
     model = Client
     form_class = ClientForm
-    permission_required = 'client.change_client'
 
     def get_success_url(self):
         return reverse('client:view', args=[self.kwargs.get('pk')])
@@ -57,10 +54,9 @@ class ClientUpdateView(PermissionRequiredMixin, UpdateView):
         return self.object
 
 
-class ClientDeleteView(PermissionRequiredMixin, DeleteView):
+class ClientDeleteView(DeleteView):
     model = Client
     success_url = reverse_lazy('client:list')
-    permission_required = 'client.delete_client'
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)

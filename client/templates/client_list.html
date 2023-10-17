@@ -13,14 +13,10 @@
                 <div class="btn-group-center">
                   <a href="{% url 'client:view' object.pk %}"
                      class="btn btn-sm btn-outline-secondary">Просмотр</a>
-                  {% if perms.client.change_client %}
                     <a href="{% url 'client:edit' object.pk %}" type="button"
                      class="btn btn-sm btn-outline-secondary">Редактирование</a>
-                  {% endif %}
-                  {% if perms.client.delete_client %}
                     <a href="{% url 'client:delete' object.pk %}" type="button"
                      class="btn btn-sm btn-outline-danger">Удаление</a>
-                  {% endif %}
                 </div>
               </div>
             </div>

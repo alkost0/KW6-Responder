@@ -8,7 +8,7 @@
                 <h4 class="my-0 font-weight-normal">{{object.name|title}}</h4>
             </div>
           <div class="card-body">
-            <p class="card-text">email: {{ object.email}}</p>
+            <p class="card-text">E-mail: {{ object.email}}</p>
               <p class="card-text">Комментарий: {{object.message }}</p>
               <p class="card-text">Создал: {{object.owner|default:'Неизвестный пользователь' }}</p>
               <a href="{% url 'client:list' %}" type="button" class="btn btn-sm btn-outline-secondary">Назад</a>

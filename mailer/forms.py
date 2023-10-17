@@ -1,8 +1,6 @@
 from django import forms
-
 from client.models import Client
-from mailling.models import Message, Mailling
-
+from mailer.models import Message, Mailer
 
 class StyleFormMixin:
 
@@ -11,15 +9,13 @@ class StyleFormMixin:
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form_control'
 
-
 class MessageForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Message
         exclude = ('owner',)
 
-
-class MaillingForm(StyleFormMixin, forms.ModelForm):
+class MailerForm(StyleFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         uid = kwargs.pop('uid')
@@ -28,5 +24,5 @@ class MaillingForm(StyleFormMixin, forms.ModelForm):
         self.fields['message'].queryset = Message.objects.all().filter(owner=uid)
 
     class Meta:
-        model = Mailling
+        model = Mailer
         exclude = ('owner',)

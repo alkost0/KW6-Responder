@@ -7,9 +7,9 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <p>Хотите удалить пользователя "{{ object.name|title}}"?</p>
-                        <button type="submit" class="btn btn-lg btn-block btn-outline-danger">Подтвердить</button>
-                        <a href="{% url 'client:list' %}" class="btn btn-lg btn-block btn-outline-secondary">Отмена</a>
+                        <p>Удалить пользователя "{{ object.name|title}}"?</p>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-danger">Да</button>
+                        <a href="{% url 'client:list' %}" class="btn btn-lg btn-block btn-outline-secondary">Нет</a>
                     </form>
                 </div>
             </div>

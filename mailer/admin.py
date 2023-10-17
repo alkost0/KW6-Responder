@@ -1,9 +1,7 @@
 from django.contrib import admin
+from mailer.models import Mailer, Logs, Message
 
-from mailling.models import Client, Mailling, Logs, Message
-
-
-@admin.register(Mailling)
+@admin.register(Mailer)
 class MaillingAdmin(admin.ModelAdmin):
     list_display = ('date_start', 'date_end', 'periodicity', 'status',)
     list_filter = ('status', 'periodicity',)

@@ -1,14 +1,11 @@
 import pytz
-
 from django.db import models
-
 from config import settings
-
 
 class Client(models.Model):
     TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 
-    name = models.CharField(max_length=250, verbose_name='ФИО')
+    name = models.CharField(max_length=250, verbose_name='Ф.И.О.')
     email = models.EmailField(verbose_name='Почта', unique=True)
     message = models.TextField(verbose_name='Комментарий')
 

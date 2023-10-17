@@ -1,21 +1,19 @@
 import random
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
 from blog.models import Blog
-from mailling.forms import MessageForm, MaillingForm
-from mailling.models import Mailling, Logs, Message
-from mailling.services import send_message_email, get_cache_count_mailling, get_cache_count_client
+from mailer.forms import MessageForm, MailerForm
+from mailer.models import Mailer, Logs, Message
+from mailer.services import send_message_email, get_cache_count_mailer, get_cache_count_client
 
 
-class MaillingCreateView(PermissionRequiredMixin, CreateView):
-    model = Mailling
-    form_class = MaillingForm
-    permission_required = 'mailling.add_mailling'
-    success_url = reverse_lazy('mailling:mailling_list')
+class MailerCreateView(CreateView):
+    model = Mailer
+    form_class = MailerForm
+    success_url = reverse_lazy('mailer:mailer_list')
 
     def form_valid(self, form):
         self.obj = form.save()
@@ -30,24 +28,18 @@ class MaillingCreateView(PermissionRequiredMixin, CreateView):
         kwargs.update({'uid': self.request.user.id})
         return kwargs
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['title'] = "Создание рассылки"
-    #     return context
 
-
-class MaillingListView(ListView):
-    model = Mailling
+class MailerListView(ListView):
+    model = Mailer
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['object_list'] = Message.objects.filter(user=self.kwargs.get('pk'))
         context['title'] = "Список рассылок"
         return context
 
 
-class MaillingDetailView(DetailView):
-    model = Mailling
+class MailerDetailView(DetailView):
+    model = Mailer
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,13 +47,12 @@ class MaillingDetailView(DetailView):
         return context
 
 
-class MaillingUpdateView(PermissionRequiredMixin, UpdateView):
-    model = Mailling
-    form_class = MaillingForm
-    permission_required = 'mailling.change_mailling'
+class MailerUpdateView(UpdateView):
+    model = Mailer
+    form_class = MailerForm
 
     def get_success_url(self):
-        return reverse('mailling:mailling_view', args=[self.kwargs.get('pk')])
+        return reverse('mailer:mailer_view', args=[self.kwargs.get('pk')])
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -75,14 +66,13 @@ class MaillingUpdateView(PermissionRequiredMixin, UpdateView):
         return kwargs
 
 
-class MaillingDeleteView(PermissionRequiredMixin, DeleteView):
-    model = Mailling
-    success_url = reverse_lazy('mailling:mailling_list')
-    permission_required = 'mailling.delete_mailling'
+class MailerDeleteView(DeleteView):
+    model = Mailer
+    success_url = reverse_lazy('mailer:mailer_list')
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.owner != self.request.user:
+        if self.object.owner != self.request.user and not self.request.user.is_staff:
             raise Http404
         return self.object
 
@@ -96,13 +86,12 @@ class LogsListView(ListView):
         return context
 
 
-class MessageCreateView(PermissionRequiredMixin, CreateView):
+class MessageCreateView(CreateView):
     model = Message
     form_class = MessageForm
-    permission_required = 'mailling.add_message'
 
     def get_success_url(self, *args, **kwargs):
-        return reverse('mailling:mailling_list')
+        return reverse('mailer:mailer_list')
 
     def form_valid(self, form):
         self.obj = form.save()
@@ -112,11 +101,11 @@ class MessageCreateView(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class MessageUpdateView(PermissionRequiredMixin, UpdateView):
+
+class MessageUpdateView(UpdateView):
     model = Message
     form_class = MessageForm
-    success_url = reverse_lazy('mailling:mailling_list')
-    permission_required = 'mailling.change_message'
+    success_url = reverse_lazy('mailer:mailer_list')
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -125,10 +114,9 @@ class MessageUpdateView(PermissionRequiredMixin, UpdateView):
         return self.object
 
 
-class MessageDeleteView(PermissionRequiredMixin, DeleteView):
+class MessageDeleteView(DeleteView):
     model = Message
-    success_url = reverse_lazy('mailling:mailling_list')
-    permission_required = 'mailling.delete_message'
+    success_url = reverse_lazy('mailer:mailer_list')
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -138,14 +126,13 @@ class MessageDeleteView(PermissionRequiredMixin, DeleteView):
 
 
 class MainView(TemplateView):
-    template_name = 'mailling/main.html'
+    template_name = 'mailer/main.html'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['title'] = "Добро пожаловать в сервис управления рассылками!"
-
+        context_data['title'] = "Cервис управления рассылками"
         context_data['object_list'] = random.sample(list(Blog.objects.all()), 3)
-        context_data['mailling'] = get_cache_count_mailling()
-        context_data['active_mailling'] = Mailling.objects.filter(status='started').count()
+        context_data['mailer'] = get_cache_count_mailer()
+        context_data['active_mailer'] = Mailer.objects.filter(status='started').count()
         context_data['client'] = get_cache_count_client()
         return context_data

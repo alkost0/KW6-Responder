@@ -1,18 +1,13 @@
 from django.db import models
-
 from client.models import Client
 from config import settings
 
 NULLABLE = {'blank': True, 'null': True}
 
-# DAILY = timedelta(days=1)
-# WEEKLY = timedelta(days=7)
-# MONTHLY = timedelta(days=30, hours=12)
-
 PERIODICITY_CHOICES = (
-    ('DAILY', 'раз в день'),
-    ('WEEKLY', 'раз в неделю'),
-    ('MONTHLY', 'раз в месяц')
+    ('DAILY', 'ежедневно'),
+    ('WEEKLY', 'еженедельно'),
+    ('MONTHLY', 'ежемесячно')
 )
 
 STATUS_CHOICES = (
@@ -24,7 +19,7 @@ STATUS_CHOICES = (
 
 class Message(models.Model):
     subject_letter = models.CharField(max_length=100, verbose_name='Тема рассылки')
-    body_letter = models.TextField(verbose_name='Тело рассылки')
+    body_letter = models.TextField(verbose_name='Содержание рассылки')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
                               verbose_name='Пользователь')
@@ -37,7 +32,7 @@ class Message(models.Model):
         verbose_name_plural = 'сообщения'
 
 
-class Mailling(models.Model):
+class Mailer(models.Model):
     date_start = models.DateTimeField(verbose_name='Дата и время начала рассылки')
     date_end = models.DateTimeField(verbose_name='Дата и время окончания рассылки')
     periodicity = models.CharField(max_length=50, choices=PERIODICITY_CHOICES, verbose_name='Периодичность')
@@ -60,7 +55,7 @@ class Logs(models.Model):
     status_try = models.CharField(max_length=50, verbose_name='Статус попытки')
     answer = models.CharField(max_length=250, null=True, verbose_name='Ответ сервера')
 
-    mailling_id = models.ForeignKey(Mailling, on_delete=models.CASCADE, verbose_name='Рассылка')
+    mailer_id = models.ForeignKey(Mailer, on_delete=models.CASCADE, verbose_name='Рассылка')
 
     def __str__(self):
         return f'{self.last_try}: {self.status_try}'

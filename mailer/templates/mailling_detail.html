@@ -13,11 +13,11 @@
                 <p class="card-text">время рассылки: {{ object.date_start}}-{{ object.date_end}}</p>
                 <p class="card-text">периодичность: {{ object.periodicity}}</p>
                 <p class="card-text">cтатус: {{object.status }}</p>
-                <p class="card-text">КОМУ:
+                <p class="card-text">Кому:
                     {% for clt in object.client.all %}
                         <p class="card-text">{{ clt|title}}</p>
                     {% endfor %}
-                <a href="{% url 'mailling:mailling_list' %}" type="button" class="btn btn-sm btn-outline-secondary">Назад</a>
+                <a href="{% url 'mailer:mailer_list' %}" type="button" class="btn btn-sm btn-outline-secondary">Назад</a>
             </div>
         </div>
       </div>

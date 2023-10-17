@@ -20,16 +20,16 @@
         <div class="container">
           <div class="row">
             <div class="col-sm-8 col-md-7 py-4">
-              <h4 class="text-white">Сервис управления рассылками</h4>
+              <h4 class="text-white">Управление рассылками</h4>
             </div>
             <div class="col-sm-4 offset-md-1 py-4">
               <h4 class="text-white">Меню</h4>
               <ul class="list-unstyled">
                 {% if user.is_authenticated %}
-                  <li><a href="{% url 'mailling:list' %}" class="text-white">Главная</a></li>
-                  <li><a href="{% url 'mailling:mailling_list' %}" class="text-white">Рассылки</a></li>
+                  <li><a href="{% url 'mailer:list' %}" class="text-white">Главная</a></li>
+                  <li><a href="{% url 'mailer:mailer_list' %}" class="text-white">Рассылки</a></li>
                   <li><a href="{% url 'client:list' %}" class="text-white">Клиенты</a></li>
-                  <li><a href="{% url 'mailling:logs_list' %}" class="text-white">Отчет</a></li>
+                  <li><a href="{% url 'mailer:logs_list' %}" class="text-white">Отчеты</a></li>
                   <li><a href="{% url 'users:logout' %}" class="text-white">Выйти</a></li>
                 {% else %}
                   <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
@@ -75,7 +75,7 @@
     <footer class="text-muted">
       <div class="container">
         <p class="float-right">
-          <a href="#">В начало</a>
+          <a href="#">Наверх</a>
         </p>
         <p>&copy; 2023 - {% now 'Y' %}</p>
       </div>

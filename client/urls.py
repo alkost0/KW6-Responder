@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 
 from client.apps import ClientConfig
 from client.views import ClientCreateView, ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView
