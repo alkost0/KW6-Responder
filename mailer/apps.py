@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
 
-class MailerConfig(AppConfig):
+class MaillingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'mailer'
+    name = 'mailling'
+    verbose_name = "Сервис управления рассылками"
