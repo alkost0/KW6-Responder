@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('periodicity', models.CharField(choices=[('DAILY', 'ежедневно'), ('WEEKLY', 'еженедельно'), ('MONTHLY', 'ежемесячно')], max_length=50, verbose_name='Периодичность')),
                 ('status', models.CharField(choices=[('created', 'создана'), ('started', 'запущена'), ('closed', 'завершена')], default='created', max_length=50, verbose_name='Статус')),
                 ('client', models.ManyToManyField(to='client.client', verbose_name='Кому')),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailling.message', verbose_name='Сообщение')),
+                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailer.message', verbose_name='Сообщение')),
                 ('owner', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
             ],
             options={
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
                 ('last_try', models.DateTimeField(auto_now_add=True, verbose_name='Дата и время последней попытки отправки')),
                 ('status_try', models.CharField(max_length=50, verbose_name='Статус попытки')),
                 ('answer', models.CharField(max_length=250, null=True, verbose_name='Ответ сервера')),
-                ('mailling_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailling.mailling', verbose_name='Рассылка')),
+                ('mailer_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailer.mailer', verbose_name='Рассылка')),
             ],
             options={
                 'verbose_name': 'лог',
